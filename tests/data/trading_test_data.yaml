@@ -1,0 +1,20 @@
+trading:
+  spot_tab:
+    name: "Spot"
+  filters:
+    favorites: "Favorites"
+    all: "All"
+  table:
+    expected_headers:
+      - Pair
+      - Price
+      - 24h Change
+      - High
+      - Low
+      - Last 7 days
+    min_pairs_to_check: 3
+    required_field: "pair"
+  wait_times:
+    after_click: 2000
+    after_filter: 1000
+
