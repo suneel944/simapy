@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    
+    - name: Install Make
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+    
+    - name: Setup project
+      run: |
+        make setup
+    
+    - name: Run code quality checks
+      run: |
+        make check
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install Make
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+    
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Setup project
+      run: |
+        make setup
+    
+    - name: Install Playwright browsers
+      env:
+        BROWSER: ${{ matrix.browser }}
+      run: |
+        make install-playwright
+    
+    - name: Run tests
+      env:
+        BROWSER: ${{ matrix.browser }}
+      run: |
+        make test-ci
+    
+    - name: Generate Allure report
+      if: always()
+      run: |
+        make allure-generate
+    
+    - name: Upload Allure results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: allure-results-${{ matrix.python-version }}-${{ matrix.browser }}
+        path: allure-results/
+        retention-days: 30
+    
+    - name: Upload Allure report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: allure-report-${{ matrix.python-version }}-${{ matrix.browser }}
+        path: allure-report/
+        retention-days: 7
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        tags: simapy:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+

@@ -1,0 +1,20 @@
+# Cursor Rules for simAPy Project
+
+## File Creation Rules
+
+### Markdown Files (.md)
+- **NEVER create or write any .md (markdown) files without explicit user permission**
+- This includes but is not limited to:
+  - README.md
+  - Documentation files (*.md)
+  - Markdown notes or summaries
+  - Any file with .md extension
+- If documentation or markdown content is needed, ask the user first before creating any .md files
+- The only exception is if the user explicitly requests creation of a specific .md file
+
+## General Guidelines
+
+- Always ask for permission before creating documentation files
+- Prefer updating existing files over creating new ones
+- When in doubt about file creation, ask the user first
+

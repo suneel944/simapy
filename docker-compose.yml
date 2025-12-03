@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  simapy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: simapy:latest
+    container_name: simapy-tests
+    volumes:
+      # Mount configs directory
+      - ./configs:/app/configs:ro
+      # Mount test data
+      - ./tests/data:/app/tests/data:ro
+      # Mount test results and reports (write access)
+      - ./allure-results:/app/allure-results
+      - ./allure-report:/app/allure-report
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+    # Override default command if needed
+    # command: pytest tests/ui/ -v --alluredir=allure-results -n 3
+    networks:
+      - simapy-network
+
+  # Optional: Service to serve Allure reports
+  allure:
+    image: "frankescobar/allure-docker-service"
+    container_name: simapy-allure
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./allure-results:/app/allure-results
+      - ./allure-report:/app/allure-report
+    environment:
+      - CHECK_RESULTS_EVERY_SECONDS=3
+      - KEEP_HISTORY=1
+    networks:
+      - simapy-network
+    profiles:
+      - reporting
+
+networks:
+  simapy-network:
+    driver: bridge
+
