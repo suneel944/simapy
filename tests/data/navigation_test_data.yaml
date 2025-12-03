@@ -1,0 +1,38 @@
+navigation:
+  expected_items:
+    - Markets
+    - Log In
+    - Sign Up
+  url_patterns:
+    markets: ".*market.*"
+    multibank: ".*multibank.*"
+  dropdown_items:
+    about_us:
+      - "Why Multibank?"
+      - "Why Multilink"
+      - "Global Presence"
+      - "Management"
+      - "Awards"
+      - "Sponsorship"
+      - "Blog"
+      - "Milestones"
+    features: []
+    trade:
+      - "Spot Exchange"
+      - "Instant Buy"
+      - "Panic Sell"
+      - "Convert"
+    support: []
+  viewports:
+    desktop:
+      width: 1920
+      height: 1080
+    tablet:
+      width: 768
+      height: 1024
+    mobile:
+      width: 375
+      height: 667
+  wait_times:
+    after_navigation: 2000
+

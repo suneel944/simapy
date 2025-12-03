@@ -1,0 +1,62 @@
+content:
+  hero_banner:
+    expected_keywords:
+      - "blockchain"
+      - "financial"
+      - "ecosystem"
+    min_heading_length: 10
+  download_section:
+    heading_keywords:
+      - "trade"
+      - "go"
+    app_store:
+      url_patterns:
+        - "apps.apple.com"
+        - "itunes.apple.com"
+    google_play:
+      url_patterns:
+        - "play.google.com"
+    descriptive_text_pattern: "Stay updated|mobile app"
+    wait_times:
+      after_scroll: 1000
+  marketing_banners:
+    min_count: 1
+    wait_times:
+      after_scroll: 2000
+  about_us:
+    sub_pages:
+      - "Why Multibank?"
+      - "Global Presence"
+      - "Management"
+      - "Awards"
+      - "Sponsorship"
+      - "Blog"
+      - "Milestones"
+    min_content_length: 100
+    placeholder_keywords:
+  features:
+    sub_pages:
+      - "Spot Exchange"
+      - "Institutional"
+      - "Buy & Sell"
+    min_content_length: 50
+    placeholder_keywords:
+  trade:
+    sub_pages:
+      - "Spot"
+      - "Instant Buy"
+      - "Panic Sell"
+      - "Convert"
+    min_content_length: 50
+    placeholder_keywords:
+  support:
+    sub_pages:
+      - "Contact Us"
+      - "FAQs"
+    min_content_length: 50
+    placeholder_keywords:
+      - "lorem ipsum"
+      - "placeholder"
+      - "sample text"
+      - "coming soon"
+

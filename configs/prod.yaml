@@ -1,0 +1,13 @@
+MultiBank:
+  base_url: ${MULTIBANK_BASE_URL:https://trade.multibank.io}
+  element_visibility_timeout: ${MULTIBANK_ELEMENT_VISIBILITY_TIMEOUT:2000}
+
+Playwright:
+  viewport:
+    width: 1280
+    height: 720
+  headed: ${PLAYWRIGHT_HEADED:false}
+  navigation_timeout: ${PLAYWRIGHT_NAVIGATION_TIMEOUT:30000}
+  load_state_timeout: ${PLAYWRIGHT_LOAD_STATE_TIMEOUT:30000}
+  element_timeout: ${PLAYWRIGHT_ELEMENT_TIMEOUT:10000}
+  short_timeout: ${PLAYWRIGHT_SHORT_TIMEOUT:2000}
