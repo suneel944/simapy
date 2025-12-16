@@ -310,41 +310,33 @@ endif
 test-allure: test
 	@echo "📊 Generating and serving Allure report..."
 ifeq ($(OS),Windows_NT)
-	@$(VENV_BIN)\python tests\utils\allure\report_server.py 8080
+	@$(VENV_BIN)\python tests\utils\reporting\report_server.py 8080
 else
-	@$(VENV_BIN)/python tests/utils/allure/report_server.py 8080
+	@$(VENV_BIN)/python tests/utils/reporting/report_server.py 8080
 endif
 
 test-parallel-allure: test-parallel
 	@echo "📊 Generating and serving Allure report..."
 ifeq ($(OS),Windows_NT)
-	@$(VENV_BIN)\python tests\utils\allure\report_server.py 8080
+	@$(VENV_BIN)\python tests\utils\reporting\report_server.py 8080
 else
-	@$(VENV_BIN)/python tests/utils/allure/report_server.py 8080
+	@$(VENV_BIN)/python tests/utils/reporting/report_server.py 8080
 endif
 
 allure-serve:
 	@echo "📊 Generating and serving Allure report..."
 ifeq ($(OS),Windows_NT)
-	@$(VENV_BIN)\python tests\utils\allure\report_server.py 8080
+	@$(VENV_BIN)\python tests\utils\reporting\report_server.py 8080
 else
-	@$(VENV_BIN)/python tests/utils/allure/report_server.py 8080
+	@$(VENV_BIN)/python tests/utils/reporting/report_server.py 8080
 endif
 
 allure-generate:
 	@echo "📊 Generating Allure report..."
 ifeq ($(OS),Windows_NT)
-	@if not exist "$(VENV_BIN)\allure.exe" ( \
-		echo "📦 Installing allure-pytest..." && \
-		$(VENV_BIN)\pip install allure-pytest >nul 2>&1 \
-	)
-	@$(VENV_BIN)\allure generate allure-results --clean -o allure-report || echo "Allure report generation failed"
+	@$(VENV_BIN)\python -c "from pathlib import Path; from tests.utils.reporting.report_server import generate_allure_report; exit(0 if generate_allure_report(Path('allure-results'), Path('allure-report')) else 1)"
 else
-	@if ! command -v $(VENV_BIN)/allure > /dev/null 2>&1; then \
-		echo "📦 Installing allure-pytest..."; \
-		$(VENV_BIN)/pip install allure-pytest > /dev/null 2>&1; \
-	fi
-	@$(VENV_BIN)/allure generate allure-results --clean -o allure-report || echo "Allure report generation failed"
+	@$(VENV_BIN)/python -c "from pathlib import Path; from tests.utils.reporting.report_server import generate_allure_report; exit(0 if generate_allure_report(Path('allure-results'), Path('allure-report')) else 1)"
 endif
 
 clean-all: clean

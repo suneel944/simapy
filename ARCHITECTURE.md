@@ -117,8 +117,7 @@ simAPy/
 │   │   ├── configload.py   # Configuration loading
 │   │   └── testdata.py     # Test data loading
 │   ├── utils/              # Utility modules
-│   │   ├── wait.py         # Wait utilities (thin wrappers)
-│   │   ├── retry.py        # Retry decorators
+│   │   ├── retry.py        # Retry decorators (thin utilities)
 │   │   ├── logging/        # Logging framework
 │   │   └── exceptions.py   # Custom exceptions
 │   ├── ui/                 # Test files
@@ -265,33 +264,29 @@ def test_navigation(self, page, config):
   - Provide consistent error handling
   - Don't hide Playwright features
 
-**Implementation:**
+**Implementation (conceptual):**
 ```python
 # ✅ Thin wrapper that adds value (error handling + logging)
-def wait_for_dropdown(page: Page, dropdown_locator: Locator, timeout: int = 5000):
-    """Wait for dropdown with custom error handling"""
-    try:
-        # Still uses Playwright's expect API directly
-        expect(dropdown_locator).to_be_visible(timeout=timeout)
-        return dropdown_locator
-    except PlaywrightTimeoutError as e:
-        # Add custom error with context
-        raise ElementNotFoundError(f"Dropdown not found: {e}") from e
+@retry_element_interaction(max_attempts=3, delay=0.5)
+def click_markets(self, timeout: int = 10_000) -> None:
+    """Click Markets link with retry and structured logging."""
+    self.markets_nav_link.wait_for(state="visible", timeout=timeout)
+    self.markets_nav_link.click()
 
 # ❌ Unnecessary wrapper that hides Playwright
 def click_element(locator):
-    """Don't do this - just use locator.click() directly"""
+    """Don't do this - just use locator.click() directly."""
     locator.click()
 ```
 
-**When to Create Utilities:**
+**When to Create Utilities (what we actually keep in code):**
 - ✅ Error handling and logging
 - ✅ Domain-specific operations
 - ✅ Retry logic for flaky operations
 - ✅ Test data transformations
 
-**When NOT to Create Utilities:**
-- ❌ Simple Playwright operations (click, fill, etc.)
+- **When NOT to Create Utilities:**
+- ❌ Simple Playwright operations (click, fill, etc.) — call Playwright APIs directly
 - ❌ Selector building (use Playwright's locators)
 - ❌ Basic assertions (use Playwright's expect)
 

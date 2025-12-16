@@ -19,9 +19,6 @@ def validate_test_data_structure(test_data: dict[str, Any], required_keys: list[
     Raises:
         TestDataError: If required keys are missing
     """
-    if not isinstance(test_data, dict):
-        raise TestDataError(f"Test data must be a dictionary, got {type(test_data)}")
-
     missing_keys = [key for key in required_keys if key not in test_data]
     if missing_keys:
         error_msg = f"Test data missing required keys: {', '.join(missing_keys)}"
@@ -39,9 +36,6 @@ def validate_navigation_data(navigation_data: dict[str, Any]) -> None:
     Raises:
         TestDataError: If navigation data is invalid
     """
-    if not isinstance(navigation_data, dict):
-        raise TestDataError("Navigation data must be a dictionary")
-
     required_fields = ["expected_items", "url_patterns"]
     missing_fields = [field for field in required_fields if field not in navigation_data]
 
@@ -71,9 +65,6 @@ def validate_trading_data(trading_data: dict[str, Any]) -> None:
     Raises:
         TestDataError: If trading data is invalid
     """
-    if not isinstance(trading_data, dict):
-        raise TestDataError("Trading data must be a dictionary")
-
     # Check for table data
     if "table" in trading_data:
         table_data = trading_data["table"]
@@ -99,9 +90,6 @@ def validate_content_data(content_data: dict[str, Any]) -> None:
     Raises:
         TestDataError: If content data is invalid
     """
-    if not isinstance(content_data, dict):
-        raise TestDataError("Content data must be a dictionary")
-
     # Validate marketing_banners if present
     if "marketing_banners" in content_data:
         banners_data = content_data["marketing_banners"]
